@@ -16,10 +16,14 @@ public class LaHORDownloader {
     //start the app.
     public void run() {
         MainDialog maindialog = new MainDialog(null, true);
+        
+        maindialog.myinit();
+        
         maindialog.setVisible(true);
     }
     
     public static void main(String[] args) {
+        System.err.println("Starting application...");
         LaHORDownloader app = new LaHORDownloader();
         app.run();
     }
