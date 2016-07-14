@@ -7,7 +7,12 @@
 
 package net.garyscorner.lahordownloader;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
@@ -21,11 +26,43 @@ public class MainDialog extends javax.swing.JDialog {
     
     
     //my functions
+    
     //initialize my stuff
     public void myinit() {
         filechooser = new JFileChooser();
         filter = new FileNameExtensionFilter("MP4 Video", "mp4");
         filechooser.setFileFilter(filter);
+        
+    }
+    
+    //validate the URL
+    private URL validateURL(String url) {
+        
+        
+        URL returnvalue;
+        try {
+            returnvalue = new URL(url);
+        } catch (MalformedURLException ex) {
+            System.err.printf("Bad URL provided:  %1$s", url);
+            JOptionPane.showMessageDialog(this, "Bad URL!", "Error", JOptionPane.ERROR_MESSAGE);
+            returnvalue = null;
+        }
+        
+        return returnvalue;
+    }
+    
+    
+    
+    //setup the download process
+    private void startdownload(URL url, String savefile)  {
+        JOptionPane.showMessageDialog(null, "SaveFile:  " + savefile);
+        
+                
+        DownloadDialog downloaddialog = new DownloadDialog(null, false);
+        downloaddialog.myinit(url, savefile);
+        
+        downloaddialog.setVisible(true);
+        
     }
     
     /**
@@ -87,13 +124,18 @@ public class MainDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_downloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_downloadActionPerformed
-        System.err.println("Download clicked open save dialog...");
         
-        //if they approved file then go for the download
-        if( filechooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION ) {
-            
+        System.err.println("Validating the URL...");
+        URL url = this.validateURL(this.textfield_url.getText());
+        if(url != null) {
+
+            System.err.println("Download clicked open save dialog...");
+
+            //if they approved file then go for the download
+            if( filechooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION ) {
+                this.startdownload( url, filechooser.getSelectedFile().getName() );
+            }
         }
-        
         
         
     }//GEN-LAST:event_jButton_downloadActionPerformed
