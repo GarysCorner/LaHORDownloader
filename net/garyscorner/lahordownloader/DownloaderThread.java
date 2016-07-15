@@ -12,7 +12,6 @@ package net.garyscorner.lahordownloader;
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
@@ -24,10 +23,13 @@ public class DownloaderThread extends Thread{
     private URL url;
     FileOutputStream savefile;
     
-    public DownloaderThread(URL url, FileOutputStream savefile) {
+    DownloadProgress progress;
+    
+    public DownloaderThread(URL url, FileOutputStream savefile, DownloadProgress progress) {
         super();
         this.url = url;
         this.savefile = savefile;
+        this.progress = progress;
     }
     
     @Override
@@ -35,33 +37,43 @@ public class DownloaderThread extends Thread{
         
         byte[] buff = new byte[1024];
         
+        progress.setStatus(DownloadProgress.STATUS_CONNECTING);
+        
         URLConnection conn = null;     
         try {
             conn = this.url.openConnection();
         } catch (IOException ex) {
             Logger.getLogger(DownloaderThread.class.getName()).log(Level.SEVERE, null, ex);
+            progress.setStatus(DownloadProgress.STATUS_ERROR);
         }
+        
+        progress.setStatus(DownloadProgress.STATUS_CONNECTED);
         
         long filesize = conn.getContentLength();
         System.err.printf("File size %1$d\n", filesize);
-       
+        progress.setFileSize(filesize);
         
         BufferedInputStream instream=null;
         try {
             instream = new BufferedInputStream(conn.getInputStream());
         } catch (IOException ex) {
             Logger.getLogger(DownloaderThread.class.getName()).log(Level.SEVERE, null, ex);
+            progress.setStatus(DownloadProgress.STATUS_ERROR);
         }
         
         int count;
         
         try {
             while((count = instream.read(buff, 0 ,1024)) != -1) {
-                
+                progress.setStatus(DownloadProgress.STATUS_STARTED);
                 savefile.write(buff, 0 ,count);
+                progress.addCount(count);
             }
+            progress.setStatus(DownloadProgress.STATUS_FINISHED);
         } catch (IOException ex) {
             Logger.getLogger(DownloaderThread.class.getName()).log(Level.SEVERE, null, ex);
+            progress.setStatus(DownloadProgress.STATUS_ERROR);
+            
         }
         
         try {
@@ -76,3 +88,4 @@ public class DownloaderThread extends Thread{
         
     }
 }
+

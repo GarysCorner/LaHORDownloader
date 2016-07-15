@@ -7,6 +7,7 @@
 
 package net.garyscorner.lahordownloader;
 
+import java.awt.Dialog;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -57,12 +58,15 @@ public class MainDialog extends javax.swing.JDialog {
         
         
                 
-        DownloadDialog downloaddialog = new DownloadDialog(null, false);
+        DownloadDialog downloaddialog = new DownloadDialog(null , true);
         downloaddialog.myinit(url, savefile);
+        
+        downloaddialog.startdownload();
         
         downloaddialog.setVisible(true);
         
-        downloaddialog.startdownload();
+        
+        
         
     }
     
