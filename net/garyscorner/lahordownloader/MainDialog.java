@@ -83,8 +83,8 @@ public class MainDialog extends javax.swing.JDialog {
         textfield_url = new javax.swing.JTextField();
         jButton_download = new javax.swing.JButton();
         MenuBar = new javax.swing.JMenuBar();
-        MenuItem_Preferences = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        MenuItem_File = new javax.swing.JMenu();
+        MenuItem_Preferences = new javax.swing.JMenuItem();
         MenuItem_About = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -96,13 +96,13 @@ public class MainDialog extends javax.swing.JDialog {
             }
         });
 
-        MenuItem_Preferences.setText("File");
+        MenuItem_File.setText("File");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, 0));
-        jMenuItem1.setText("Preferences");
-        MenuItem_Preferences.add(jMenuItem1);
+        MenuItem_Preferences.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, 0));
+        MenuItem_Preferences.setText("Preferences");
+        MenuItem_File.add(MenuItem_Preferences);
 
-        MenuBar.add(MenuItem_Preferences);
+        MenuBar.add(MenuItem_File);
 
         MenuItem_About.setText("About");
         MenuBar.add(MenuItem_About);
@@ -149,9 +149,9 @@ public class MainDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenu MenuItem_About;
-    private javax.swing.JMenu MenuItem_Preferences;
+    private javax.swing.JMenu MenuItem_File;
+    private javax.swing.JMenuItem MenuItem_Preferences;
     private javax.swing.JButton jButton_download;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JTextField textfield_url;
     // End of variables declaration//GEN-END:variables
 }
