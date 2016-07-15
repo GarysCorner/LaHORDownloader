@@ -7,6 +7,7 @@
 
 package net.garyscorner.lahordownloader;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.JFileChooser;
@@ -52,14 +53,16 @@ public class MainDialog extends javax.swing.JDialog {
     
     
     //setup the download process
-    private void startdownload(URL url, String savefile)  {
-        JOptionPane.showMessageDialog(null, "SaveFile:  " + savefile);
+    private void startdownload(URL url, File savefile)  {
+        
         
                 
         DownloadDialog downloaddialog = new DownloadDialog(null, false);
         downloaddialog.myinit(url, savefile);
         
         downloaddialog.setVisible(true);
+        
+        downloaddialog.startdownload();
         
     }
     
@@ -137,7 +140,7 @@ public class MainDialog extends javax.swing.JDialog {
 
             //if they approved file then go for the download
             if( filechooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION ) {
-                this.startdownload( url, filechooser.getSelectedFile().getName() );
+                this.startdownload( url, filechooser.getSelectedFile() );
             }
         }
         

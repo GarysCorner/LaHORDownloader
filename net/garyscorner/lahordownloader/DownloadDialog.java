@@ -6,24 +6,47 @@
 
 package net.garyscorner.lahordownloader;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class DownloadDialog extends javax.swing.JDialog {
 
     //my variables
+    private File savefile;
+    private URL url;
     
+    private DownloaderThread downloader;
+    FileOutputStream outfile;
     
     //my functions
     
     //special init for me
-    public void myinit(URL url, String savefile) {
+    public void myinit(URL url, File savefile) {
+        this.url = url;
+        this.savefile = savefile;
+        
         
     }
     
     //start the download
     public void startdownload() {
         
+        try {
+            outfile = new FileOutputStream(this.savefile);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DownloadDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        downloader = new DownloaderThread(url, outfile);
+        
+        System.err.println("Download thread starting...");
+        downloader.start();
     }
     
     
@@ -44,17 +67,22 @@ public class DownloadDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jProgressBar_download = new javax.swing.JProgressBar();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jProgressBar_download, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jProgressBar_download, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -66,5 +94,6 @@ public class DownloadDialog extends javax.swing.JDialog {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JProgressBar jProgressBar_download;
     // End of variables declaration//GEN-END:variables
 }
