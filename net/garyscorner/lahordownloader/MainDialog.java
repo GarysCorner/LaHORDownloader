@@ -9,8 +9,6 @@ package net.garyscorner.lahordownloader;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -85,7 +83,8 @@ public class MainDialog extends javax.swing.JDialog {
         textfield_url = new javax.swing.JTextField();
         jButton_download = new javax.swing.JButton();
         MenuBar = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        MenuItem_Preferences = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         MenuItem_About = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -97,8 +96,13 @@ public class MainDialog extends javax.swing.JDialog {
             }
         });
 
-        jMenu1.setText("File");
-        MenuBar.add(jMenu1);
+        MenuItem_Preferences.setText("File");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, 0));
+        jMenuItem1.setText("Preferences");
+        MenuItem_Preferences.add(jMenuItem1);
+
+        MenuBar.add(MenuItem_Preferences);
 
         MenuItem_About.setText("About");
         MenuBar.add(MenuItem_About);
@@ -145,8 +149,9 @@ public class MainDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenu MenuItem_About;
+    private javax.swing.JMenu MenuItem_Preferences;
     private javax.swing.JButton jButton_download;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JTextField textfield_url;
     // End of variables declaration//GEN-END:variables
 }
