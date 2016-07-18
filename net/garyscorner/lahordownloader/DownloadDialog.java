@@ -86,6 +86,9 @@ public class DownloadDialog extends javax.swing.JDialog {
                             jLabel_status.setText("Downloading...");
                             break;
                             
+                        case DownloadProgress.STATUS_RETREIVING:
+                            jLabel_status.setText("Retreiving download URL from website...");
+                            break;
                         default:
                             
                          

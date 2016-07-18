@@ -19,6 +19,7 @@ public class DownloadProgress {
     public final static int STATUS_NONE = 0;  //no status
     public final static int STATUS_CONNECTING = 3;  //obvious
     public final static int STATUS_CONNECTED = 4;
+    public final static int STATUS_RETREIVING = 5;
     public final static int STATUS_STARTED = 1; //started downloaded
     public final static int STATUS_FINISHED = 2;  //download completed
     public final static int STATUS_ERROR = -1;  //Error occured
