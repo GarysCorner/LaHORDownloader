@@ -11,9 +11,12 @@ import java.awt.Dialog;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 
@@ -137,11 +140,20 @@ public class MainDialog extends javax.swing.JDialog {
     private void jButton_downloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_downloadActionPerformed
         
         System.err.println("Validating the URL...");
-        URL url = this.validateURL(this.textfield_url.getText());
+        String inputurl = this.textfield_url.getText();
+        URL url = this.validateURL(inputurl);
         if(url != null) {
 
-            System.err.println("Download clicked open save dialog...");
-
+            Pattern pattern = Pattern.compile("[^/]*$");
+            Matcher matcher = pattern.matcher(inputurl);
+            
+            if(matcher.find()) {
+                System.err.println("Found default base filename:  " + matcher.group() );
+                filechooser.setSelectedFile(new File(matcher.group() + ".mp4"));
+            } else {
+                System.err.println("Could not get default filename from:  " + inputurl);
+            }
+            
             //if they approved file then go for the download
             if( filechooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION ) {
                 this.startdownload( url, filechooser.getSelectedFile() );
