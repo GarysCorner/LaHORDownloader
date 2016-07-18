@@ -51,58 +51,67 @@ public class DownloadDialog extends javax.swing.JDialog {
         
         ActionListener checkProgress = new ActionListener() {
             
+            long updatecount = 0;
+            
             long filesize;
             int status = 0;
             
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                if(this.status != progress.getStatus()) {
-                    this.status = progress.getStatus();  //ugly
-                    
-                    switch(this.status) {
-                        case DownloadProgress.STATUS_CONNECTED:
-                            jLabel_status.setText("Connected");
-                            break;
-                            
-                        case DownloadProgress.STATUS_CONNECTING:
-                            jLabel_status.setText("Connecting...");
-                            break;
-                        
-                        case DownloadProgress.STATUS_ERROR:
-                            jLabel_status.setText("ERROR!");
-                            break;
-                            
-                        case DownloadProgress.STATUS_FINISHED:
-                            jLabel_status.setText("Finished!");
-                            break;
-                            
-                        case DownloadProgress.STATUS_PERROR:
-                            jLabel_status.setText("Error parsing video URL!");
-                            break;
-                            
-                        case DownloadProgress.STATUS_STARTED:
-                            jLabel_status.setText("Downloading...");
-                            break;
-                            
-                        case DownloadProgress.STATUS_RETREIVING:
-                            jLabel_status.setText("Retreiving download URL from website...");
-                            break;
-                        default:
-                            
-                         
-                    }
-                    
-                }
+                long newupdatecount = progress.getCount();
                 
-                //check progress and update progress bar here
-                if(this.filesize > 0) {
-                     jProgressBar_download.setValue((int) (progress.getCount() / 1024));
-                } else if(this.filesize == -1) {
+                if(updatecount < newupdatecount) {
                     
-                } else {
-                    if((this.filesize = progress.getFileSize()) > 0 ) {
-                        jProgressBar_download.setMaximum((int)(this.filesize / 1024));
+                    updatecount = newupdatecount;
+                    
+                    if(this.status != progress.getStatus()) {
+                        this.status = progress.getStatus();  //ugly
+
+                        switch(this.status) {
+                            case DownloadProgress.STATUS_CONNECTED:
+                                jLabel_status.setText("Connected");
+                                break;
+
+                            case DownloadProgress.STATUS_CONNECTING:
+                                jLabel_status.setText("Connecting...");
+                                break;
+
+                            case DownloadProgress.STATUS_ERROR:
+                                jLabel_status.setText("ERROR!");
+                                break;
+
+                            case DownloadProgress.STATUS_FINISHED:
+                                jLabel_status.setText("Finished!");
+                                break;
+
+                            case DownloadProgress.STATUS_PERROR:
+                                jLabel_status.setText("Error parsing video URL!");
+                                break;
+
+                            case DownloadProgress.STATUS_STARTED:
+                                jLabel_status.setText("Downloading...");
+                                break;
+
+                            case DownloadProgress.STATUS_RETREIVING:
+                                jLabel_status.setText("Retreiving download URL from website...");
+                                break;
+                            default:
+
+
+                        }
+
+                    }
+
+                    //check progress and update progress bar here
+                    if(this.filesize > 0) {
+                         jProgressBar_download.setValue((int) (progress.getCount() / 1024));
+                    } else if(this.filesize == -1) {
+
+                    } else {
+                        if((this.filesize = progress.getFileSize()) > 0 ) {
+                            jProgressBar_download.setMaximum((int)(this.filesize / 1024));
+                        }
                     }
                 }
             }

@@ -14,6 +14,7 @@ public class DownloadProgress {
     private long count = 0;
     private boolean finished = false;  //is file download finished
     private int status = 0;
+    private long updatecount = 0;
     
     //status flags
     public final static int STATUS_NONE = 0;  //no status
@@ -25,8 +26,14 @@ public class DownloadProgress {
     public final static int STATUS_ERROR = -1;  //Error occured
     public final static int STATUS_PERROR = -2;  //failed to parse mp4 from URL
     
+    //returns the number of times updates to determine if we need to update the GUI
+    public synchronized long getUpdateCount() {
+        return this.updatecount;
+    }
+    
     public synchronized void setStatus(int status) {
         this.status = status;
+        this.updatecount++;
     }
     
     public synchronized int getStatus() {
@@ -35,6 +42,7 @@ public class DownloadProgress {
     
     public synchronized void setFinished() {
         finished = true;
+        this.updatecount++;
     }
     
     public synchronized boolean getFinished() {
@@ -43,10 +51,12 @@ public class DownloadProgress {
     
     public synchronized void setFileSize(long filesize) {
         this.filesize = filesize;
+        this.updatecount++;
     }
     
     public synchronized void addCount(int count) {
         this.count += count;
+        this.updatecount++;
     }
     
     public synchronized long getFileSize() {
