@@ -88,7 +88,7 @@ public class MainDialog extends javax.swing.JDialog {
         
         this.setTitle("La HOR Video Downloader");
         
-        this.MenuItem_File.setMnemonic('F');
+        
         this.MenuItem_About.setMnemonic('A');
         
     }
@@ -264,8 +264,6 @@ public class MainDialog extends javax.swing.JDialog {
         jButton_close = new javax.swing.JButton();
         jLabel_url = new javax.swing.JLabel();
         MenuBar = new javax.swing.JMenuBar();
-        MenuItem_File = new javax.swing.JMenu();
-        MenuItem_Preferences = new javax.swing.JMenuItem();
         MenuItem_About = new javax.swing.JMenu();
         jMenuItem_help = new javax.swing.JMenuItem();
         jMenuItem_AboutItem = new javax.swing.JMenuItem();
@@ -300,14 +298,6 @@ public class MainDialog extends javax.swing.JDialog {
         jLabel_url.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel_url.setLabelFor(textfield_url);
         jLabel_url.setText("URL:");
-
-        MenuItem_File.setText("File");
-
-        MenuItem_Preferences.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, 0));
-        MenuItem_Preferences.setText("Preferences");
-        MenuItem_File.add(MenuItem_Preferences);
-
-        MenuBar.add(MenuItem_File);
 
         MenuItem_About.setText("About");
 
@@ -452,8 +442,6 @@ public class MainDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenu MenuItem_About;
-    private javax.swing.JMenu MenuItem_File;
-    private javax.swing.JMenuItem MenuItem_Preferences;
     private javax.swing.JButton jButton_close;
     private javax.swing.JButton jButton_download;
     private javax.swing.JTextField jLabel_status;
