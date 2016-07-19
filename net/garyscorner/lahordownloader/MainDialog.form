@@ -52,6 +52,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="textfield_url" max="32767" attributes="0"/>
           <Component id="jButton_download" alignment="0" pref="400" max="32767" attributes="0"/>
+          <Component id="jProgressBar_download" alignment="0" max="32767" attributes="0"/>
+          <Component id="jLabel_status" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -60,6 +62,11 @@
               <Component id="textfield_url" min="-2" pref="27" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jButton_download" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="jProgressBar_download" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabel_status" min="-2" pref="19" max="-2" attributes="0"/>
+              <EmptySpace pref="28" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -74,6 +81,10 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_downloadActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JProgressBar" name="jProgressBar_download">
+    </Component>
+    <Component class="javax.swing.JTextField" name="jLabel_status">
     </Component>
   </SubComponents>
 </Form>

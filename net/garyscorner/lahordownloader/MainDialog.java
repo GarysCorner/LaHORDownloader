@@ -8,15 +8,22 @@
 package net.garyscorner.lahordownloader;
 
 import java.awt.Dialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.Timer;
 
 
 
@@ -27,6 +34,19 @@ public class MainDialog extends javax.swing.JDialog {
     JFileChooser filechooser;
     FileNameExtensionFilter filter;
     
+    //Oldialog
+    private File savefile;
+    private URL url;
+    
+    private DownloaderThread downloader;
+    FileOutputStream outfile;
+    
+    long filesize = 0;
+    
+    private DownloadProgress progress;
+    
+    private Timer progressTimer;
+    //end old dialog
     
     //my functions
     
@@ -35,6 +55,8 @@ public class MainDialog extends javax.swing.JDialog {
         filechooser = new JFileChooser();
         filter = new FileNameExtensionFilter("MP4 Video", "mp4");
         filechooser.setFileFilter(filter);
+        
+        this.progress = new DownloadProgress();
         
     }
     
@@ -59,16 +81,91 @@ public class MainDialog extends javax.swing.JDialog {
     //setup the download process
     private void startdownload(URL url, File savefile)  {
         
+        this.url = url;
+        this.savefile = savefile;
         
+        ActionListener checkProgress = new ActionListener() {
+            
+            long updatecount = 0;
+            
+            long filesize;
+            int status = 0;
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 
-        DownloadDialog downloaddialog = new DownloadDialog(null , true);
-        downloaddialog.myinit(url, savefile);
+                long newupdatecount = progress.getCount();
+                
+                if(updatecount < newupdatecount) {
+                    
+                    updatecount = newupdatecount;
+                    
+                    if(this.status != progress.getStatus()) {
+                        this.status = progress.getStatus();  //ugly
+
+                        switch(this.status) {
+                            case DownloadProgress.STATUS_CONNECTED:
+                                jLabel_status.setText("Connected");
+                                break;
+
+                            case DownloadProgress.STATUS_CONNECTING:
+                                jLabel_status.setText("Connecting...");
+                                break;
+
+                            case DownloadProgress.STATUS_ERROR:
+                                jLabel_status.setText("ERROR!");
+                                break;
+
+                            case DownloadProgress.STATUS_FINISHED:
+                                jLabel_status.setText("Finished!");
+                                break;
+
+                            case DownloadProgress.STATUS_PERROR:
+                                jLabel_status.setText("Error parsing video URL!");
+                                break;
+
+                            case DownloadProgress.STATUS_STARTED:
+                                jLabel_status.setText("Downloading...");
+                                break;
+
+                            case DownloadProgress.STATUS_RETREIVING:
+                                jLabel_status.setText("Retreiving download URL from website...");
+                                break;
+                            default:
+
+
+                        }
+
+                    }
+
+                    //check progress and update progress bar here
+                    if(this.filesize > 0) {
+                         jProgressBar_download.setValue((int) (progress.getCount() / 1024));
+                    } else if(this.filesize == -1) {
+
+                    } else {
+                        if((this.filesize = progress.getFileSize()) > 0 ) {
+                            jProgressBar_download.setMaximum((int)(this.filesize / 1024));
+                        }
+                    }
+                }
+            }
+            
+        };
         
-        downloaddialog.startdownload();
+        progressTimer = new Timer(1000, checkProgress);
+        progressTimer.start();
         
-        downloaddialog.setVisible(true);
+        try {
+            outfile = new FileOutputStream(this.savefile);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DownloadDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
+        downloader = new DownloaderThread(url, outfile, progress);
         
+        System.err.println("Download thread starting...");
+        downloader.start();
         
         
     }
@@ -92,6 +189,8 @@ public class MainDialog extends javax.swing.JDialog {
 
         textfield_url = new javax.swing.JTextField();
         jButton_download = new javax.swing.JButton();
+        jProgressBar_download = new javax.swing.JProgressBar();
+        jLabel_status = new javax.swing.JTextField();
         MenuBar = new javax.swing.JMenuBar();
         MenuItem_File = new javax.swing.JMenu();
         MenuItem_Preferences = new javax.swing.JMenuItem();
@@ -125,13 +224,20 @@ public class MainDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(textfield_url)
             .addComponent(jButton_download, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jProgressBar_download, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel_status)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(textfield_url, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_download))
+                .addComponent(jButton_download)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jProgressBar_download, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel_status, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -171,6 +277,8 @@ public class MainDialog extends javax.swing.JDialog {
     private javax.swing.JMenu MenuItem_File;
     private javax.swing.JMenuItem MenuItem_Preferences;
     private javax.swing.JButton jButton_download;
+    private javax.swing.JTextField jLabel_status;
+    private javax.swing.JProgressBar jProgressBar_download;
     private javax.swing.JTextField textfield_url;
     // End of variables declaration//GEN-END:variables
 }
