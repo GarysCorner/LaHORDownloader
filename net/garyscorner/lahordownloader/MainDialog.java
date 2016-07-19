@@ -30,9 +30,8 @@ import javax.swing.Timer;
 public class MainDialog extends javax.swing.JDialog {
     
     //my variables
-    JFileChooser filechooser;
     FileNameExtensionFilter filter;
-    
+    String path = null;
     //should be true when downloading
     private boolean downloading = false;
     
@@ -79,16 +78,14 @@ public class MainDialog extends javax.swing.JDialog {
     
     //initialize my stuff
     public void myinit() {
-        filechooser = new JFileChooser();
+        
         filter = new FileNameExtensionFilter("MP4 Video", "mp4");
-        filechooser.setFileFilter(filter);
+        
         
         this.progress = new DownloadProgress();
         
         this.setTitle("La HOR Video Downloader");
         
-        
-        this.MenuItem_About.setMnemonic('A');
         
     }
     
@@ -242,7 +239,8 @@ public class MainDialog extends javax.swing.JDialog {
      * Creates new form MainDialog
      */
     public MainDialog(java.awt.Frame parent, boolean modal) {
-        super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
+        //super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
+        super(parent, modal);
         initComponents();
         this.myinit();
     }
@@ -287,6 +285,8 @@ public class MainDialog extends javax.swing.JDialog {
             }
         });
 
+        jLabel_status.setEditable(false);
+
         jButton_close.setText("Close");
         jButton_close.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -298,9 +298,10 @@ public class MainDialog extends javax.swing.JDialog {
         jLabel_url.setLabelFor(textfield_url);
         jLabel_url.setText("URL:");
 
+        MenuItem_About.setMnemonic('A');
         MenuItem_About.setText("About");
 
-        jMenuItem_help.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, 0));
+        jMenuItem_help.setMnemonic('H');
         jMenuItem_help.setText("Help");
         jMenuItem_help.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -309,7 +310,7 @@ public class MainDialog extends javax.swing.JDialog {
         });
         MenuItem_About.add(jMenuItem_help);
 
-        jMenuItem_AboutItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, 0));
+        jMenuItem_AboutItem.setMnemonic('A');
         jMenuItem_AboutItem.setText("About");
         jMenuItem_AboutItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -364,6 +365,16 @@ public class MainDialog extends javax.swing.JDialog {
 
     private void jButton_downloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_downloadActionPerformed
         
+        JFileChooser filechooser = null;
+        
+        if(this.path != null) {
+            filechooser = new JFileChooser(this.path);
+        } else {
+            filechooser = new JFileChooser();
+        }
+        
+        filechooser.setFileFilter(filter);
+        
         System.err.println("Validating the URL...");
         String inputurl = this.textfield_url.getText();
         URL url = this.validateURL(inputurl);
@@ -381,6 +392,8 @@ public class MainDialog extends javax.swing.JDialog {
             
             //if they approved file then go for the download
             if( filechooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION ) {
+                
+                path = filechooser.getSelectedFile().getPath();
                 
                 if(filechooser.getSelectedFile().exists()) {
                     if(JOptionPane.showConfirmDialog(this, "The file \"" + filechooser.getSelectedFile().toString() + "\" already exists!  Do you want to overwrite it?", "Overwrite?", JOptionPane.YES_NO_CANCEL_OPTION) != JOptionPane.YES_OPTION) {
