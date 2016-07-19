@@ -7,7 +7,7 @@
 
 package net.garyscorner.lahordownloader;
 
-
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -21,6 +21,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JDialog;
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 
