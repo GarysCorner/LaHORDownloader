@@ -38,6 +38,7 @@ public class DownloaderThread extends Thread{
         this.progress = progress;
     }
     
+        
     @Override
     public void run() {
         
@@ -45,6 +46,12 @@ public class DownloaderThread extends Thread{
             downloadVideo();
         } else {
             progress.setStatus(DownloadProgress.STATUS_PERROR);
+        }
+        
+        try {
+            this.savefile.close();
+        } catch (IOException ex) {
+            System.err.printf("There was an error closing the file:  %1$s%2$s", ex, System.lineSeparator());
         }
     }
     
@@ -58,6 +65,12 @@ public class DownloaderThread extends Thread{
             conn = this.url.openConnection();
         } catch(IOException ex) {
             System.err.println("Error could not fetch URL:  " + this.url.toString());
+            return false;
+        }
+        
+        if(this.isInterrupted()) {
+            System.err.println("Download thread was interrupted!");
+            progress.setStatus(DownloadProgress.STATUS_CANCELED);
             return false;
         }
         
@@ -78,6 +91,12 @@ public class DownloaderThread extends Thread{
         boolean foundmatch = false;
         
         do {
+            
+            if(this.isInterrupted()) {
+                System.err.println("Download thread was interrupted!");
+                progress.setStatus(DownloadProgress.STATUS_CANCELED);
+                return false;
+            }
             
             try {
                 line = inbuff.readLine();
@@ -151,6 +170,12 @@ public class DownloaderThread extends Thread{
         System.err.printf("File size %1$d\n", filesize);
         progress.setFileSize(filesize);
         
+        if(this.isInterrupted()) {
+            System.err.println("Download thread was interrupted!");
+            progress.setStatus(DownloadProgress.STATUS_CANCELED);
+            return;
+        }
+        
         BufferedInputStream instream=null;
         try {
             instream = new BufferedInputStream(conn.getInputStream());
@@ -161,9 +186,16 @@ public class DownloaderThread extends Thread{
         
         int count;
         
+        progress.setStatus(DownloadProgress.STATUS_STARTED);
+        
         try {
+            
             while((count = instream.read(buff, 0 ,1024)) != -1) {
-                progress.setStatus(DownloadProgress.STATUS_STARTED);
+                if(this.isInterrupted()) {
+                    System.err.println("Download thread was interrupted!");
+                    progress.setStatus(DownloadProgress.STATUS_CANCELED);
+                    return;
+                }
                 savefile.write(buff, 0 ,count);
                 progress.addCount(count);
             }
@@ -174,13 +206,6 @@ public class DownloaderThread extends Thread{
             
         }
         
-        try {
-            savefile.close();
-        } catch (IOException ex) {
-            Logger.getLogger(DownloaderThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-       
         
         System.err.println("File downloaded!");
         

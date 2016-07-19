@@ -7,7 +7,6 @@
 
 package net.garyscorner.lahordownloader;
 
-import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -15,9 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -33,6 +29,9 @@ public class MainDialog extends javax.swing.JDialog {
     //my variables
     JFileChooser filechooser;
     FileNameExtensionFilter filter;
+    
+    //should be true when downloading
+    private boolean downloading = false;
     
     //Oldialog
     private File savefile;
@@ -50,6 +49,31 @@ public class MainDialog extends javax.swing.JDialog {
     
     //my functions
     
+    //attempted close
+    public boolean attemptwindowclose() {
+        
+        if(downloading) {
+            
+            if(JOptionPane.showConfirmDialog(this, "Cancel download?", "Cancel Download", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION) {
+                System.err.println("Interrupting download thread...");
+                downloader.interrupt();
+                
+                this.downloadFinished(DownloadProgress.STATUS_CANCELED);
+                
+                return false;
+                
+            } else {
+                return false;
+            }
+            
+        } else {
+            return true;
+        }
+        
+        
+        
+    }
+    
     //initialize my stuff
     public void myinit() {
         filechooser = new JFileChooser();
@@ -57,6 +81,8 @@ public class MainDialog extends javax.swing.JDialog {
         filechooser.setFileFilter(filter);
         
         this.progress = new DownloadProgress();
+        
+        this.setTitle("La HOR Video Downloader");
         
     }
     
@@ -88,16 +114,25 @@ public class MainDialog extends javax.swing.JDialog {
             System.err.println("Error:  Could not join download thread!!!");
         }
         
+        if(finalstatus == DownloadProgress.STATUS_CANCELED || finalstatus == DownloadProgress.STATUS_ERROR || finalstatus == DownloadProgress.STATUS_PERROR) {
+            System.err.println("Downloaded thread ended with error, deleteing the file:  " + this.savefile);
+            this.savefile.delete();
+        }
+        
         downloader = null;  //let the garbage collector take it away
         
         jButton_download.setEnabled(true);
         textfield_url.setEnabled(true);
+        jButton_close.setText("Close");
+        this.downloading = false;
         
     }
     
     //setup the download process
     private void startdownload(URL url, File savefile)  {
         
+        this.downloading = true;
+        jButton_close.setText("Cancel");
         jButton_download.setEnabled(false);
         textfield_url.setEnabled(false);
         
@@ -154,6 +189,10 @@ public class MainDialog extends javax.swing.JDialog {
                             case DownloadProgress.STATUS_RETREIVING:
                                 jLabel_status.setText("Retreiving download URL from website...");
                                 break;
+                                
+                            case DownloadProgress.STATUS_CANCELED:
+                                jLabel_status.setText("Download canceled!");
+                                break;
                             default:
 
 
@@ -199,6 +238,7 @@ public class MainDialog extends javax.swing.JDialog {
     public MainDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.myinit();
     }
 
     /**
@@ -214,12 +254,19 @@ public class MainDialog extends javax.swing.JDialog {
         jButton_download = new javax.swing.JButton();
         jProgressBar_download = new javax.swing.JProgressBar();
         jLabel_status = new javax.swing.JTextField();
+        jButton_close = new javax.swing.JButton();
+        jLabel_url = new javax.swing.JLabel();
         MenuBar = new javax.swing.JMenuBar();
         MenuItem_File = new javax.swing.JMenu();
         MenuItem_Preferences = new javax.swing.JMenuItem();
         MenuItem_About = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jButton_download.setText("Download");
         jButton_download.addActionListener(new java.awt.event.ActionListener() {
@@ -227,6 +274,16 @@ public class MainDialog extends javax.swing.JDialog {
                 jButton_downloadActionPerformed(evt);
             }
         });
+
+        jButton_close.setText("Close");
+        jButton_close.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_closeActionPerformed(evt);
+            }
+        });
+
+        jLabel_url.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel_url.setText("URL:");
 
         MenuItem_File.setText("File");
 
@@ -245,22 +302,37 @@ public class MainDialog extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(textfield_url)
-            .addComponent(jButton_download, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-            .addComponent(jProgressBar_download, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel_status)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton_download, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel_status)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel_url, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textfield_url))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jProgressBar_download, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_close)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(textfield_url, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textfield_url, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_url))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_download)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jProgressBar_download, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_status, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jProgressBar_download, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_close))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -292,6 +364,26 @@ public class MainDialog extends javax.swing.JDialog {
         
     }//GEN-LAST:event_jButton_downloadActionPerformed
 
+    //catch the closing event and attempt to close
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if(this.attemptwindowclose()) {
+            System.err.println("Closing window.");
+            this.dispose();
+            System.exit(0);
+            
+        } else {
+            System.err.println("Window close prevented.");
+        }
+            
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jButton_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_closeActionPerformed
+        if(this.attemptwindowclose()) { //attempt co close the window
+            this.dispose();
+            System.exit(0);
+        }
+    }//GEN-LAST:event_jButton_closeActionPerformed
+
  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -299,8 +391,10 @@ public class MainDialog extends javax.swing.JDialog {
     private javax.swing.JMenu MenuItem_About;
     private javax.swing.JMenu MenuItem_File;
     private javax.swing.JMenuItem MenuItem_Preferences;
+    private javax.swing.JButton jButton_close;
     private javax.swing.JButton jButton_download;
     private javax.swing.JTextField jLabel_status;
+    private javax.swing.JLabel jLabel_url;
     private javax.swing.JProgressBar jProgressBar_download;
     private javax.swing.JTextField textfield_url;
     // End of variables declaration//GEN-END:variables

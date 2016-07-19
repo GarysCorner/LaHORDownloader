@@ -25,6 +25,7 @@ public class DownloadProgress {
     public final static int STATUS_FINISHED = 2;  //download completed
     public final static int STATUS_ERROR = -1;  //Error occured
     public final static int STATUS_PERROR = -2;  //failed to parse mp4 from URL
+    public final static int STATUS_CANCELED=-10;
     
     //returns the number of times updates to determine if we need to update the GUI
     public synchronized long getUpdateCount() {
