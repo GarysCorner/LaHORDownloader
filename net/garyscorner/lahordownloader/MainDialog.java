@@ -7,6 +7,7 @@
 
 package net.garyscorner.lahordownloader;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -20,6 +21,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JDialog;
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 
@@ -85,6 +87,9 @@ public class MainDialog extends javax.swing.JDialog {
         this.progress = new DownloadProgress();
         
         this.setTitle("La HOR Video Downloader");
+        
+        this.MenuItem_File.setMnemonic('F');
+        this.MenuItem_About.setMnemonic('A');
         
     }
     
@@ -262,12 +267,19 @@ public class MainDialog extends javax.swing.JDialog {
         MenuItem_File = new javax.swing.JMenu();
         MenuItem_Preferences = new javax.swing.JMenuItem();
         MenuItem_About = new javax.swing.JMenu();
+        jMenuItem_help = new javax.swing.JMenuItem();
         jMenuItem_AboutItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+        });
+
+        textfield_url.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textfield_urlActionPerformed(evt);
             }
         });
 
@@ -286,6 +298,7 @@ public class MainDialog extends javax.swing.JDialog {
         });
 
         jLabel_url.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel_url.setLabelFor(textfield_url);
         jLabel_url.setText("URL:");
 
         MenuItem_File.setText("File");
@@ -298,6 +311,16 @@ public class MainDialog extends javax.swing.JDialog {
 
         MenuItem_About.setText("About");
 
+        jMenuItem_help.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, 0));
+        jMenuItem_help.setText("Help");
+        jMenuItem_help.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_helpActionPerformed(evt);
+            }
+        });
+        MenuItem_About.add(jMenuItem_help);
+
+        jMenuItem_AboutItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, 0));
         jMenuItem_AboutItem.setText("About");
         jMenuItem_AboutItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -369,6 +392,16 @@ public class MainDialog extends javax.swing.JDialog {
             
             //if they approved file then go for the download
             if( filechooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION ) {
+                
+                if(filechooser.getSelectedFile().exists()) {
+                    if(JOptionPane.showConfirmDialog(this, "The file \"" + filechooser.getSelectedFile().toString() + "\" already exists!  Do you want to overwrite it?", "Overwrite?", JOptionPane.YES_NO_CANCEL_OPTION) != JOptionPane.YES_OPTION) {
+                        System.err.println("File download canceled!");
+                        return;
+                    } else {
+                        System.err.println("User choose to overwrite file!");
+                    }
+                }
+                    
                 this.startdownload( url, filechooser.getSelectedFile() );
             }
         }
@@ -397,10 +430,22 @@ public class MainDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton_closeActionPerformed
 
     private void jMenuItem_AboutItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_AboutItemActionPerformed
+        System.err.println("Opening about dialog...");
         AboutDialog aboutdialog = new AboutDialog(null, true);
         aboutdialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         aboutdialog.setVisible(true);
     }//GEN-LAST:event_jMenuItem_AboutItemActionPerformed
+
+    private void jMenuItem_helpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_helpActionPerformed
+        System.err.println("Opening help dialog"); 
+        HelpDialog helpdialog = new HelpDialog(null, true);
+        helpdialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        helpdialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem_helpActionPerformed
+
+    private void textfield_urlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textfield_urlActionPerformed
+        this.jButton_downloadActionPerformed(evt);
+    }//GEN-LAST:event_textfield_urlActionPerformed
 
  
 
@@ -414,6 +459,7 @@ public class MainDialog extends javax.swing.JDialog {
     private javax.swing.JTextField jLabel_status;
     private javax.swing.JLabel jLabel_url;
     private javax.swing.JMenuItem jMenuItem_AboutItem;
+    private javax.swing.JMenuItem jMenuItem_help;
     private javax.swing.JProgressBar jProgressBar_download;
     private javax.swing.JTextField textfield_url;
     // End of variables declaration//GEN-END:variables

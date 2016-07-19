@@ -13,6 +13,11 @@ public class LaHORDownloader {
 
     //variables
     public static final String Version = "1.0";
+    public static final String About = "La HOR Video Downloader v" + LaHORDownloader.Version + 
+                                        " was created to allow downloading of videos from the Louisiana House of Representative's video on demand site at \"http://house.louisiana.gov/H_Video/Hse_Video_OnDemand.aspx\".  " +
+                                        "Although this program was designed exclusively for this site it will most likely work on some other sites.  Please do not use this program to download things illegally!";
+    
+    
     
     //functions
     
