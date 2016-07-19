@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Created-By: 1.7.0_101 (Oracle Corporation)
+Main-Class: net.garyscorner.lahordownloader.LaHORDownloader
+Sealed: true
+Name: net/garyscorner/lahordownloader
+Specification-Title: La HOR Video Downloader
+Specification-Version: 1.0
+Specification-Vendor: GarysCorner.NET
+Implementation-Title: net.garyscorner.lahordownloader
+
