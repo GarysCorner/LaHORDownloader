@@ -243,7 +243,7 @@ public class MainDialog extends javax.swing.JDialog {
      * Creates new form MainDialog
      */
     public MainDialog(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+        super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
         initComponents();
         this.myinit();
     }
