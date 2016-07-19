@@ -10,9 +10,7 @@ package net.garyscorner.lahordownloader;
 
 public class AboutDialog extends javax.swing.JDialog {
 
-    /**
-     * Creates new form AboutDialog
-     */
+  
     public AboutDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

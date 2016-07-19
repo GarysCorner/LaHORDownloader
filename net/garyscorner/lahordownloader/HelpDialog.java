@@ -7,10 +7,7 @@
 
 package net.garyscorner.lahordownloader;
 
-/**
- *
- * @author gary
- */
+
 public class HelpDialog extends javax.swing.JDialog {
 
     /**
