@@ -76,10 +76,30 @@ public class MainDialog extends javax.swing.JDialog {
         return returnvalue;
     }
     
-    
+    //called when download stops or is finished
+    private void downloadFinished(int finalstatus) {
+        
+        //join the downloaded thread
+        
+        try {
+            downloader.join();  //join the downloader
+            System.err.println("Joined download thread.");
+        } catch (InterruptedException ex) {
+            System.err.println("Error:  Could not join download thread!!!");
+        }
+        
+        downloader = null;  //let the garbage collector take it away
+        
+        jButton_download.setEnabled(true);
+        textfield_url.setEnabled(true);
+        
+    }
     
     //setup the download process
     private void startdownload(URL url, File savefile)  {
+        
+        jButton_download.setEnabled(false);
+        textfield_url.setEnabled(false);
         
         this.url = url;
         this.savefile = savefile;
@@ -114,14 +134,17 @@ public class MainDialog extends javax.swing.JDialog {
 
                             case DownloadProgress.STATUS_ERROR:
                                 jLabel_status.setText("ERROR!");
+                                downloadFinished(this.status);
                                 break;
 
                             case DownloadProgress.STATUS_FINISHED:
                                 jLabel_status.setText("Finished!");
+                                downloadFinished(this.status);
                                 break;
 
                             case DownloadProgress.STATUS_PERROR:
                                 jLabel_status.setText("Error parsing video URL!");
+                                downloadFinished(this.status);
                                 break;
 
                             case DownloadProgress.STATUS_STARTED:
@@ -159,7 +182,7 @@ public class MainDialog extends javax.swing.JDialog {
         try {
             outfile = new FileOutputStream(this.savefile);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DownloadDialog.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.printf("An error occured while trying to open \"%1%s\":  %2$s", this.savefile, ex);
         }
         
         downloader = new DownloaderThread(url, outfile, progress);

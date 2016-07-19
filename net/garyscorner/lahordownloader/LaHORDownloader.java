@@ -6,6 +6,8 @@
 
 package net.garyscorner.lahordownloader;
 
+import javax.swing.JFrame;
+
 
 public class LaHORDownloader {
 
@@ -18,6 +20,8 @@ public class LaHORDownloader {
         MainDialog maindialog = new MainDialog(null, true);
         
         maindialog.myinit();
+        
+        maindialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  //make sure the program actually completes
         
         maindialog.setVisible(true);
     }
