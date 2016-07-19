@@ -12,8 +12,11 @@ Although this program will probably work on other sites it should never be used 
 ##Usage
 Simple navigate to the page where the video you want to download is playing and copy the URL of the page into this application and click download.  You will be prompted to find a save location based on the location of the page.  Once you select a download location the download will begin.
 
-###Legal
+##Legal
 This application is provided as is, you except full responsibility for any damage/harm done with/by this application.
+
+##License
+This application is licensed under the GPLv3 license.
 
 ##Arthur
 ```
