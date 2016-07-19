@@ -367,11 +367,12 @@ public class MainDialog extends javax.swing.JDialog {
         
         JFileChooser filechooser = null;
         
-        if(this.path != null) {
-            filechooser = new JFileChooser(this.path);
+        if(this.savefile != null) {
+            filechooser = new JFileChooser(this.savefile.getParent());
         } else {
             filechooser = new JFileChooser();
         }
+        
         
         filechooser.setFileFilter(filter);
         
@@ -393,9 +394,10 @@ public class MainDialog extends javax.swing.JDialog {
             //if they approved file then go for the download
             if( filechooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION ) {
                 
-                path = filechooser.getSelectedFile().getPath();
+                this.savefile = filechooser.getSelectedFile();
+                System.err.println("New default file location:  " + this.savefile);
                 
-                if(filechooser.getSelectedFile().exists()) {
+                if(this.savefile.exists()) {
                     if(JOptionPane.showConfirmDialog(this, "The file \"" + filechooser.getSelectedFile().toString() + "\" already exists!  Do you want to overwrite it?", "Overwrite?", JOptionPane.YES_NO_CANCEL_OPTION) != JOptionPane.YES_OPTION) {
                         System.err.println("File download canceled!");
                         return;
@@ -404,7 +406,7 @@ public class MainDialog extends javax.swing.JDialog {
                     }
                 }
                     
-                this.startdownload( url, filechooser.getSelectedFile() );
+                this.startdownload( url, this.savefile );
             }
         }
         
