@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 public class LaHORDownloader {
 
     //variables
+    public static final String Version = "1.0";
     
     //functions
     

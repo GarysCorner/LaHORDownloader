@@ -17,7 +17,7 @@ public class AboutDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        this.setTitle("About La HOR Video Downloader");
+        this.setTitle("About La HOR Video Downloader v" + LaHORDownloader.Version);
         
     }
 
