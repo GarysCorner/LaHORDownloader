@@ -19,7 +19,9 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JDialog;
 import javax.swing.Timer;
+
 
 
 
@@ -260,6 +262,7 @@ public class MainDialog extends javax.swing.JDialog {
         MenuItem_File = new javax.swing.JMenu();
         MenuItem_Preferences = new javax.swing.JMenuItem();
         MenuItem_About = new javax.swing.JMenu();
+        jMenuItem_AboutItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -294,6 +297,15 @@ public class MainDialog extends javax.swing.JDialog {
         MenuBar.add(MenuItem_File);
 
         MenuItem_About.setText("About");
+
+        jMenuItem_AboutItem.setText("About");
+        jMenuItem_AboutItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_AboutItemActionPerformed(evt);
+            }
+        });
+        MenuItem_About.add(jMenuItem_AboutItem);
+
         MenuBar.add(MenuItem_About);
 
         setJMenuBar(MenuBar);
@@ -384,6 +396,12 @@ public class MainDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButton_closeActionPerformed
 
+    private void jMenuItem_AboutItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_AboutItemActionPerformed
+        AboutDialog aboutdialog = new AboutDialog(null, true);
+        aboutdialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        aboutdialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem_AboutItemActionPerformed
+
  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -395,6 +413,7 @@ public class MainDialog extends javax.swing.JDialog {
     private javax.swing.JButton jButton_download;
     private javax.swing.JTextField jLabel_status;
     private javax.swing.JLabel jLabel_url;
+    private javax.swing.JMenuItem jMenuItem_AboutItem;
     private javax.swing.JProgressBar jProgressBar_download;
     private javax.swing.JTextField textfield_url;
     // End of variables declaration//GEN-END:variables
