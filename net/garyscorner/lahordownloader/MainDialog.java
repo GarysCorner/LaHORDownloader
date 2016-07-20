@@ -37,7 +37,7 @@ public class MainDialog extends javax.swing.JDialog {
     
     //Oldialog
     private File savefile;
-    private URL url;
+    
     
     private DownloaderThread downloader;
     FileOutputStream outfile;
@@ -139,7 +139,6 @@ public class MainDialog extends javax.swing.JDialog {
         jButton_download.setEnabled(false);
         textfield_url.setEnabled(false);
         
-        this.url = url;
         this.savefile = savefile;
         
         ActionListener checkProgress = new ActionListener() {
