@@ -18,6 +18,9 @@ This application is provided as is, you except full responsibility for any damag
 ##License
 This application is licensed under the GPLv3 license.
 
+#Comments
+I hacked this out pretty quick and I almost never make GUI applications (Linux user here), so the code is a little hacky and not quite as pretty as I would like.  Also the comments are a little lacking.  I was planning on cleaning it up and I may still but I need to go ahead and get it to the user that requested it so...
+
 ##Arthur
 ```
 Name:		Gary Andrew Bezet
