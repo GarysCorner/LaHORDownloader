@@ -156,9 +156,10 @@ public class MainDialog extends javax.swing.JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                long newupdatecount = progress.getCount();
+                long newupdatecount = progress.getUpdateCount();
                 
                 if(updatecount < newupdatecount) {
+                
                     
                     updatecount = newupdatecount;
                     

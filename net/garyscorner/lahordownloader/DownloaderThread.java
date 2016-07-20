@@ -53,6 +53,7 @@ public class DownloaderThread extends Thread{
         } catch (IOException ex) {
             System.err.printf("There was an error closing the file:  %1$s%2$s", ex, System.lineSeparator());
         }
+        System.err.printf("Download thread ended with status:  %1$d%2$s", progress.getStatus(), System.lineSeparator());
     }
     
     //populate the video url if failure for some reason return false
