@@ -23,7 +23,7 @@ public class LaHORDownloader {
     
     //start the app.
     public void run() {
-        MainDialog maindialog = new MainDialog(null, true);
+        MainDialog maindialog = new MainDialog(new DummyFrame("LaHORDownloader"), true);
         
         maindialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);  //make sure the program actually completes
         
@@ -34,6 +34,16 @@ public class LaHORDownloader {
         System.err.println("Starting application...");
         LaHORDownloader app = new LaHORDownloader();
         app.run();
+    }
+    
+    //Dummy frame for taskbar
+    public class DummyFrame extends JFrame {
+        public DummyFrame(String title) {
+            super(title);
+            this.setUndecorated(true);
+            this.setVisible(true);
+            this.setLocationRelativeTo(null);
+        }
     }
     
 }
