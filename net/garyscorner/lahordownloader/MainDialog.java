@@ -83,10 +83,7 @@ public class MainDialog extends javax.swing.JDialog {
     public void myinit() {
         
         filter = new FileNameExtensionFilter("MP4 Video", "mp4");
-        
-        
-        this.progress = new DownloadProgress();
-        
+       
         this.setTitle("La HOR Video Downloader");
         
         
@@ -111,8 +108,11 @@ public class MainDialog extends javax.swing.JDialog {
     //called when download stops or is finished
     private void downloadFinished(int finalstatus) {
         
-        //join the downloaded thread
+        //remove the timer and let the garbage collector take it
+        progressTimer.stop();
+        progressTimer = null;
         
+        //join the downloaded thread
         try {
             downloader.join();  //join the downloader
             System.err.println("Joined download thread.");
@@ -136,6 +136,8 @@ public class MainDialog extends javax.swing.JDialog {
     
     //setup the download process
     private void startdownload(URL url, File savefile)  {
+        
+        this.progress = new DownloadProgress();
         
         this.downloading = true;
         jButton_close.setText("Cancel");

@@ -14,7 +14,7 @@ public class DownloadProgress {
     private long count = 0;
     private boolean finished = false;  //is file download finished
     private int status = 0;
-    private long updatecount = 0;
+    private long updatecount = 1;
     
     //status flags
     public final static int STATUS_NONE = 0;  //no status

@@ -200,6 +200,7 @@ public class DownloaderThread extends Thread{
                 progress.addCount(count);
             }
             progress.setStatus(DownloadProgress.STATUS_FINISHED);
+            progress.setFinished();
         } catch (IOException ex) {
             Logger.getLogger(DownloaderThread.class.getName()).log(Level.SEVERE, null, ex);
             progress.setStatus(DownloadProgress.STATUS_ERROR);
