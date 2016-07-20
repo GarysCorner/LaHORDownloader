@@ -40,6 +40,7 @@ public class AboutDialog extends javax.swing.JDialog {
         jLabel_license = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jLabel_appname.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel_appname.setText("AppName");

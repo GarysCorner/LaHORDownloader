@@ -38,6 +38,7 @@ public class HelpDialog extends javax.swing.JDialog {
         jButton_ok = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jTextArea_help.setEditable(false);
         jTextArea_help.setColumns(20);
