@@ -57,6 +57,9 @@ public class MainDialog extends javax.swing.JDialog {
         if(downloading) {
             
             if(JOptionPane.showConfirmDialog(this, "Cancel download?", "Cancel Download", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION) {
+                
+                jLabel_status.setText("Cancelling download...");
+                
                 System.err.println("Interrupting download thread...");
                 downloader.interrupt();
                 
