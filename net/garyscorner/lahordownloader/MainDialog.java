@@ -32,10 +32,11 @@ public class MainDialog extends javax.swing.JDialog {
     //my variables
     FileNameExtensionFilter filter;
     String path = null;
+    
     //should be true when downloading
     private boolean downloading = false;
     
-    //Oldialog
+
     private File savefile;
     
     
@@ -47,7 +48,7 @@ public class MainDialog extends javax.swing.JDialog {
     private DownloadProgress progress;
     
     private Timer progressTimer;
-    //end old dialog
+    
     
     //my functions
     
@@ -58,7 +59,7 @@ public class MainDialog extends javax.swing.JDialog {
             
             if(JOptionPane.showConfirmDialog(this, "Cancel download?", "Cancel Download", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION) {
                 
-                jLabel_status.setText("Cancelling download...");
+                jLabel_status.setText("Canceling download...");
                 
                 System.err.println("Interrupting download thread...");
                 downloader.interrupt();
@@ -121,7 +122,7 @@ public class MainDialog extends javax.swing.JDialog {
         }
         
         if(finalstatus == DownloadProgress.STATUS_CANCELED || finalstatus == DownloadProgress.STATUS_ERROR || finalstatus == DownloadProgress.STATUS_PERROR) {
-            System.err.println("Downloaded thread ended with error, deleteing the file:  " + this.savefile);
+            System.err.println("Downloaded thread ended with error, deleting the file:  " + this.savefile);
             this.savefile.delete();
         }
         
@@ -195,7 +196,7 @@ public class MainDialog extends javax.swing.JDialog {
                                 break;
 
                             case DownloadProgress.STATUS_RETREIVING:
-                                jLabel_status.setText("Retreiving download URL from website...");
+                                jLabel_status.setText("Retrieving download URL from website...");
                                 break;
                                 
                             case DownloadProgress.STATUS_CANCELED:
@@ -229,7 +230,7 @@ public class MainDialog extends javax.swing.JDialog {
         try {
             outfile = new FileOutputStream(this.savefile);
         } catch (FileNotFoundException ex) {
-            System.err.printf("An error occured while trying to open \"%1%s\":  %2$s", this.savefile, ex);
+            System.err.printf("An error occurred while trying to open \"%1%s\":  %2$s", this.savefile, ex);
         }
         
         downloader = new DownloaderThread(url, outfile, progress);

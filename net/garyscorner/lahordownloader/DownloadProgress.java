@@ -23,7 +23,7 @@ public class DownloadProgress {
     public final static int STATUS_RETREIVING = 5;
     public final static int STATUS_STARTED = 1; //started downloaded
     public final static int STATUS_FINISHED = 2;  //download completed
-    public final static int STATUS_ERROR = -1;  //Error occured
+    public final static int STATUS_ERROR = -1;  //Error occurred
     public final static int STATUS_PERROR = -2;  //failed to parse mp4 from URL
     public final static int STATUS_CANCELED=-10;
     
